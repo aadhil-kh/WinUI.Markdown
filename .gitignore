@@ -1,0 +1,10 @@
+bin/
+obj/
+artifacts/
+.vs/
+*.user
+*.suo
+TestResults/
+*.nupkg
+*.snupkg
+!assets/package-icon.png

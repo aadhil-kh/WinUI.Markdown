@@ -1,0 +1,25 @@
+<Project>
+  <PropertyGroup>
+    <PackageVersion>0.1.0</PackageVersion>
+    <Authors>WinUI.Markdown Contributors</Authors>
+    <Company>WinUI.Markdown Contributors</Company>
+    <Copyright>Copyright (c) 2026 WinUI.Markdown Contributors</Copyright>
+    <RepositoryUrl>https://github.com/aadhil-kh/WinUI.Markdown</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>https://github.com/aadhil-kh/WinUI.Markdown</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>package-icon.png</PackageIcon>
+    <PackageTags>winui;winui3;markdown;commonmark;gfm;webview2;markdig;windowsappsdk</PackageTags>
+    <PackageReleaseNotes>Initial preview of a WinUI 3 MarkdownView control with Auto, Native, and WebView2 rendering modes.</PackageReleaseNotes>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <Deterministic>true</Deterministic>
+    <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+</Project>

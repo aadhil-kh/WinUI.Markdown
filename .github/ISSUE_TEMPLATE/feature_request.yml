@@ -1,0 +1,19 @@
+name: Feature Request
+description: Suggest an improvement for WinUI.Markdown.
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: scenario
+    attributes:
+      label: Scenario
+      description: What are you trying to build?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: What should WinUI.Markdown add or change?
+    validations:
+      required: true
