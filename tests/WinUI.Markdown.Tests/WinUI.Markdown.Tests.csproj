@@ -2,8 +2,10 @@
   <PropertyGroup>
     <TargetFrameworks>net10.0-desktop</TargetFrameworks>
     <TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">$(TargetFrameworks);net10.0-windows10.0.19041.0</TargetFrameworks>
-    <OutputType>Library</OutputType>
+    <OutputType>Exe</OutputType>
     <WinUISDKReferences>false</WinUISDKReferences>
+    <UnoSingleProject>true</UnoSingleProject>
+    <UnoFeatures>SkiaRenderer;</UnoFeatures>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <IsPackable>false</IsPackable>
@@ -13,6 +15,16 @@
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
   </PropertyGroup>
+
+  <!-- Uno.SingleProject.WinAppSdk.targets sets OutputType=WinExe for IsUnoHead projects after static evaluation.
+       Restore it to Exe before xunit validation and compilation. -->
+  <Target Name="_RestoreOutputTypeForTests"
+          BeforeTargets="_XunitValidateBuild;BeforeBuild"
+          Condition="'$(TargetFramework)' == 'net10.0-windows10.0.19041.0'">
+    <PropertyGroup>
+      <OutputType>Exe</OutputType>
+    </PropertyGroup>
+  </Target>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.0" />
     <PackageReference Include="xunit.v3" Version="3.2.0" />

@@ -8,7 +8,7 @@
     <WinUISDKReferences>false</WinUISDKReferences>
     <UnoSingleProject>true</UnoSingleProject>
     <ApplicationTitle>WinUI.Markdown.Sample</ApplicationTitle>
-    <ApplicationId>com.lextudio.winui-markdown-sample</ApplicationId>
+    <ApplicationId>com.aadhil-kh.winui-markdown-sample</ApplicationId>
     <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
     <ApplicationVersion>1</ApplicationVersion>
     <ApplicationPublisher>LeXtudio</ApplicationPublisher>
@@ -23,8 +23,6 @@
     <WindowsPackageType>None</WindowsPackageType>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <Platforms>x86;x64;ARM64</Platforms>
-    <Platform Condition="'$(Platform)' == ''">x64</Platform>
-    <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-x64</RuntimeIdentifier>
     <PublishProfile Condition="'$(Platform)' != 'AnyCPU'">win-$(Platform).pubxml</PublishProfile>
     <EnableMsixTooling>true</EnableMsixTooling>
   </PropertyGroup>
