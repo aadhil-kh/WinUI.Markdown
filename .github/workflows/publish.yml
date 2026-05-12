@@ -16,13 +16,30 @@ jobs:
       - uses: actions/setup-dotnet@v5
         with:
           dotnet-version: 10.0.x
-      - run: dotnet restore src/WinUI.Markdown/MarkdownView.csproj
+      - run: dotnet restore src/WinUI.Markdown/MarkdownView.csproj -p:Configuration=Release
       - run: dotnet build src/WinUI.Markdown/MarkdownView.csproj -c Release --no-restore
       - run: dotnet pack src/WinUI.Markdown/MarkdownView.csproj -c Release --no-build --no-restore -o artifacts
+      - run: Get-ChildItem artifacts
       - uses: actions/upload-artifact@v4
         with:
           name: packages
           path: artifacts/*
-      - run: dotnet nuget push "artifacts/*.nupkg" --api-key "${{ secrets.NUGET_API_KEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
-      - run: dotnet nuget push "artifacts/*.snupkg" --api-key "${{ secrets.NUGET_API_KEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
+      - name: Push NuGet package
+        shell: pwsh
+        run: |
+          $packages = Get-ChildItem artifacts -Filter *.nupkg -File | Where-Object { $_.Name -notlike "*.snupkg" }
+          if (-not $packages) {
+            throw "No .nupkg files found in artifacts."
+          }
+
+          foreach ($package in $packages) {
+            dotnet nuget push $package.FullName --api-key "${{ secrets.NUGET_API_KEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
+          }
+      - name: Push symbol package
+        shell: pwsh
+        run: |
+          $packages = Get-ChildItem artifacts -Filter *.snupkg -File
+          foreach ($package in $packages) {
+            dotnet nuget push $package.FullName --api-key "${{ secrets.NUGET_API_KEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
+          }
         continue-on-error: true
