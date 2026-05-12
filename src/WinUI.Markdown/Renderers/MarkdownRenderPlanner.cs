@@ -8,6 +8,7 @@ internal static class MarkdownRenderPlanner
 {
     public static MarkdownRenderPlan Resolve(RenderMode requestedMode, MarkdownDocument document, bool allowWebView2Fallback)
     {
+#if WINDOWS_APP_SDK
         if (requestedMode is RenderMode.Native or RenderMode.WebView2)
         {
             return new MarkdownRenderPlan(requestedMode, string.Empty);
@@ -22,6 +23,15 @@ internal static class MarkdownRenderPlanner
         return allowWebView2Fallback
             ? new MarkdownRenderPlan(RenderMode.WebView2, fallbackReason)
             : new MarkdownRenderPlan(RenderMode.Native, fallbackReason);
+#else
+        if (requestedMode is RenderMode.Native or RenderMode.WebView2)
+        {
+            return new MarkdownRenderPlan(RenderMode.Native, string.Empty);
+        }
+
+        var fallbackReason = GetFallbackReason(document);
+        return new MarkdownRenderPlan(RenderMode.Native, fallbackReason);
+#endif
     }
 
     private static string GetFallbackReason(MarkdownDocument document)

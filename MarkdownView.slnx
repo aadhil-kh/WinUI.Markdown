@@ -1,7 +1,6 @@
 <Solution>
   <Project Path="src/WinUI.Markdown/MarkdownView.csproj" />
   <Project Path="samples/WinUI.Markdown.Sample/MarkdownViewTest.csproj">
-    <Platform Project="x64" />
     <Deploy />
   </Project>
   <Project Path="tests/WinUI.Markdown.Tests/WinUI.Markdown.Tests.csproj" />
