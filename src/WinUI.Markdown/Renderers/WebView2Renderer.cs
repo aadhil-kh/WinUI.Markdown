@@ -1,3 +1,4 @@
+#if WINDOWS_APP_SDK
 using System.Net;
 using Markdig;
 using Microsoft.UI.Xaml;
@@ -78,3 +79,4 @@ internal sealed class WebView2Renderer : IMarkdownRenderer
             """;
     }
 }
+#endif

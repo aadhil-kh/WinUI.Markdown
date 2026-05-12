@@ -159,9 +159,13 @@ public sealed partial class MarkdownView : UserControl
 
         ResetRenderer();
         _activeRenderMode = effectiveRenderMode;
+#if WINDOWS_APP_SDK
         _renderer = effectiveRenderMode == RenderMode.WebView2
             ? new WebView2Renderer()
             : new NativeRenderer();
+#else
+        _renderer = new NativeRenderer();
+#endif
         _renderer.LinkClicked += _linkClickedHandler;
 
         PART_Root.Children.Clear();
