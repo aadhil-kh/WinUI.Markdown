@@ -15,8 +15,10 @@
 5. Create and push a version tag:
 
    ```powershell
-   git tag v0.1.0
-   git push origin v0.1.0
+   git commit -am '<>'
+   git push origin main
+   git tag v0.3.0
+   git push origin v0.3.0
    ```
 
 6. The publish workflow pushes packages to NuGet.org using `NUGET_API_KEY`.

@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <PackageVersion>0.1.0</PackageVersion>
+    <PackageVersion>0.2.3</PackageVersion>
     <Authors>WinUI.Markdown Contributors</Authors>
     <Company>WinUI.Markdown Contributors</Company>
     <Copyright>Copyright (c) 2026 WinUI.Markdown Contributors</Copyright>
