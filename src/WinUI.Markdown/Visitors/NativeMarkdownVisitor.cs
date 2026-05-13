@@ -115,7 +115,12 @@ public sealed class NativeMarkdownVisitor
         block.FontWeight = HeadingWeight(sizeIndex);
         block.LineHeight = fontSize * 1.25;
 
-        var paragraph = new Paragraph();
+        var paragraph = new Paragraph
+        {
+            FontSize = fontSize,
+            FontWeight = HeadingWeight(sizeIndex),
+            LineHeight = fontSize * 1.25
+        };
         AppendInlines(paragraph.Inlines, heading.Inline);
         block.Blocks.Add(paragraph);
 
