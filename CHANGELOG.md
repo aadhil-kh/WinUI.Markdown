@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 This project uses semantic versioning while the package API is stable enough to do so. Versions below `1.0.0` may still include breaking API refinements.
 
+## 0.3.0 - Dual Pane Monaco Editor
+
+- Added `MarkdownViewMode` with `PreviewOnly` (default) and `DualPane` modes.
+- Added dual-pane editor + preview layout to `MarkdownView`.
+- Added Monaco editor integration options: `MonacoAssetsPath`, `MonacoExtensionScriptPath`, `EditorLanguage`, and `MonacoTheme`.
+- Added `MonacoEditorTheme` enum with `System`, `Light`, and `Dark` values.
+- Added sample app controls for view mode, Monaco assets path, and Monaco theme.
+- Added sample scripts and npm metadata to sync Monaco assets into sample app `Assets/monaco`.
+- Added API tests for new enums and public Monaco extension script property.
+- Improved dual-pane robustness by avoiding hard-fail behavior when Monaco assets are not available.
+
 ## 0.2.0 - Markdown Fidelity
 
 - Added configurable heading bottom borders and GitHub-style H1/H2 borders.

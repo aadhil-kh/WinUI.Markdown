@@ -80,6 +80,24 @@
                 <StackPanel Spacing="14">
                     <TextBlock Text="Control" FontSize="18" FontWeight="SemiBold" />
 
+                    <ComboBox x:Name="ViewModeBox" Header="View mode" SelectedIndex="0" SelectionChanged="OnControlOptionChanged">
+                        <ComboBoxItem Content="Preview only" />
+                        <ComboBoxItem Content="Dual pane" />
+                    </ComboBox>
+
+                    <TextBox
+                        x:Name="MonacoPathBox"
+                        Header="Monaco assets path"
+                        PlaceholderText="Assets\\monaco"
+                        Text="Assets\monaco"
+                        TextChanged="OnControlOptionTextChanged" />
+
+                    <ComboBox x:Name="MonacoThemeBox" Header="Monaco theme" SelectedIndex="0" SelectionChanged="OnControlOptionChanged">
+                        <ComboBoxItem Content="System" />
+                        <ComboBoxItem Content="Light" />
+                        <ComboBoxItem Content="Dark" />
+                    </ComboBox>
+
                     <ComboBox x:Name="RenderModeBox" Header="Render mode" SelectedIndex="0" SelectionChanged="OnRenderModeChanged">
                         <ComboBoxItem Content="Auto" />
                         <ComboBoxItem Content="Native" />

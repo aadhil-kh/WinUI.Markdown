@@ -27,6 +27,7 @@ public sealed partial class MainWindow : Window
         };
         MarkdownEditor.Text = SampleMarkdown;
         Viewer.Text = SampleMarkdown;
+        ApplyControlOptions();
         ApplyThemePresetFields();
         ApplyTheme();
         ApplyViewVisibility();
@@ -313,7 +314,8 @@ public sealed partial class MainWindow : Window
 
     private void ApplyViewVisibility()
     {
-        SetColumnVisibility(MarkdownEditor, InputColumn, ShowInputToggle.IsChecked == true, 360);
+        var showExternalInput = ShowInputToggle.IsChecked == true && Viewer.ViewMode == MarkdownViewMode.PreviewOnly;
+        SetColumnVisibility(MarkdownEditor, InputColumn, showExternalInput, 360);
         SetColumnVisibility(PreviewHost, PreviewColumn, ShowPreviewToggle.IsChecked == true, 1, true);
         SetColumnVisibility(PropsPanel, PropsColumn, ShowPropsToggle.IsChecked == true, 320);
     }
@@ -341,7 +343,43 @@ public sealed partial class MainWindow : Window
             return;
         }
 
+        ApplyControlOptions();
+    }
+
+    private void OnControlOptionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (!_isInitialized)
+        {
+            return;
+        }
+
+        ApplyControlOptions();
+    }
+
+    private void OnControlOptionTextChanged(object sender, TextChangedEventArgs e)
+    {
+        if (!_isInitialized)
+        {
+            return;
+        }
+
+        ApplyControlOptions();
+    }
+
+    private void ApplyControlOptions()
+    {
         Viewer.AllowWebView2Fallback = AllowFallbackToggle.IsChecked == true;
+        Viewer.ViewMode = ViewModeBox.SelectedIndex == 1 ? MarkdownViewMode.DualPane : MarkdownViewMode.PreviewOnly;
+        Viewer.MonacoAssetsPath = MonacoPathBox.Text;
+        Viewer.MonacoExtensionScriptPath = "extensions/markdown.sample.js";
+        Viewer.EditorLanguage = "markdown";
+        Viewer.MonacoTheme = MonacoThemeBox.SelectedIndex switch
+        {
+            1 => MonacoEditorTheme.Light,
+            2 => MonacoEditorTheme.Dark,
+            _ => MonacoEditorTheme.System
+        };
+        ApplyViewVisibility();
     }
 
     private async void OnLinkClicked(object sender, MarkdownLinkEventArgs e)

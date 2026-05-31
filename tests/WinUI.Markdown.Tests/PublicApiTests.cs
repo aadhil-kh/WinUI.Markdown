@@ -25,4 +25,32 @@ public sealed class PublicApiTests
         args.Handled = true;
         Xunit.Assert.True(args.Handled);
     }
+
+    [Xunit.Fact]
+    public void MarkdownViewModeIncludesPreviewAndDualPane()
+    {
+        var names = Enum.GetNames<MarkdownViewMode>();
+
+        Xunit.Assert.Contains(nameof(MarkdownViewMode.PreviewOnly), names);
+        Xunit.Assert.Contains(nameof(MarkdownViewMode.DualPane), names);
+    }
+
+    [Xunit.Fact]
+    public void MonacoEditorThemeIncludesSystemLightAndDark()
+    {
+        var names = Enum.GetNames<MonacoEditorTheme>();
+
+        Xunit.Assert.Contains(nameof(MonacoEditorTheme.System), names);
+        Xunit.Assert.Contains(nameof(MonacoEditorTheme.Light), names);
+        Xunit.Assert.Contains(nameof(MonacoEditorTheme.Dark), names);
+    }
+
+    [Xunit.Fact]
+    public void MarkdownViewExposesMonacoExtensionScriptPathProperty()
+    {
+        var property = typeof(MarkdownView).GetProperty(nameof(MarkdownView.MonacoExtensionScriptPath));
+
+        Xunit.Assert.NotNull(property);
+        Xunit.Assert.Equal(typeof(string), property!.PropertyType);
+    }
 }

@@ -1,0 +1,10 @@
+{
+  "name": "winui-markdown-sample",
+  "private": true,
+  "scripts": {
+    "sync-monaco": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/sync-monaco.ps1"
+  },
+  "devDependencies": {
+    "monaco-editor": "0.55.1"
+  }
+}

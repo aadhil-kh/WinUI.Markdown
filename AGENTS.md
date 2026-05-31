@@ -46,7 +46,20 @@ If packages are missing, run restore before build/test/pack. Avoid committing `b
 
 `MarkdownView.ActualRenderMode` reports the effective renderer after auto selection. `MarkdownRenderedEventArgs` includes both requested and actual render modes.
 
+`MarkdownView` also exposes editor presentation options:
+
+- `MarkdownViewMode.PreviewOnly`: preview-only mode (default).
+- `MarkdownViewMode.DualPane`: editor + preview in one control.
+
+Dual-pane mode uses a WebView2-hosted Monaco editor provider.
+
 Useful public control options include `AllowWebView2Fallback`, `AutoFallbackReason`, `ActualRenderModeChanged`, and `MaxImageWidth`. Keep these in sync with the sample app when their behavior changes.
+
+For dual-pane mode, `MonacoAssetsPath` is required and must point to app-provided assets that include `vs/loader.js`. Do not bundle Monaco assets into the library package.
+
+`MonacoTheme` controls Monaco appearance with `System` (default), `Light`, and `Dark` values. Keep sample app controls aligned with this API.
+
+`MonacoExtensionScriptPath` is optional and resolved under `MonacoAssetsPath`. It allows app-owned Monaco extensions (snippets/providers/config) without changing the package internals.
 
 The WebView2 renderer should remain lazy. Do not instantiate WebView2 in native mode or before it is needed.
 
@@ -99,6 +112,10 @@ The sample app is a control playground:
 - Top: visibility toggles for input, preview, and properties
 
 Keep the sample useful for manual QA. If a new public property or major theme knob is added, expose it in the right panel when practical.
+
+Monaco assets are intentionally bundled in the sample app only under `samples/WinUI.Markdown.Sample/Assets/monaco` and refreshed from npm with `npm run sync-monaco` in that sample folder.
+
+The sample enables markdown-focused Monaco enhancements using `samples/WinUI.Markdown.Sample/Assets/monaco/extensions/markdown.sample.js` via `MonacoExtensionScriptPath`.
 
 The sample uses debounced theme application for sliders and text inputs. Preserve that pattern for controls that can fire rapidly.
 

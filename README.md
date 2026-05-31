@@ -11,6 +11,10 @@
 - `RenderMode.Auto`: uses native WinUI rendering when sufficient and falls back to WebView2 for unsupported Markdown/HTML.
 - `RenderMode.Native`: creates a WinUI element tree from a Markdig AST.
 - `RenderMode.WebView2`: renders Markdig HTML inside a lazy WebView2 host.
+- `MarkdownViewMode.PreviewOnly`: preview-only mode (default).
+- `MarkdownViewMode.DualPane`: editor + preview mode in a single control.
+- Monaco editor provider for dual-pane mode via app-supplied assets path.
+- Monaco editor theme options: `System` (default), `Light`, and `Dark`.
 - Shared themes for native and WebView2 rendering.
 - Built-in WinUI, GitHub, and Dracula themes.
 - Link click events routed through `MarkdownLinkEventArgs`.
@@ -36,6 +40,7 @@ Use the control:
 <md:MarkdownView
     Text="{Binding MarkdownSource}"
     RenderMode="Auto"
+    ViewMode="PreviewOnly"
     Theme="{x:Bind MarkdownTheme}"
     LinkClicked="OnLinkClicked"
     Rendered="OnMarkdownRendered" />
@@ -49,7 +54,21 @@ using WinUI.Markdown.Themes;
 
 Viewer.Text = "# Hello WinUI.Markdown";
 Viewer.RenderMode = RenderMode.Auto;
+Viewer.ViewMode = MarkdownViewMode.DualPane;
+Viewer.MonacoAssetsPath = "Assets\\monaco";
+Viewer.EditorLanguage = "markdown";
+Viewer.MonacoTheme = MonacoEditorTheme.System;
 Viewer.Theme = MarkdownTheme.GitHubLight;
+```
+
+Dual-pane mode uses Monaco:
+
+```csharp
+Viewer.ViewMode = MarkdownViewMode.DualPane;
+Viewer.MonacoAssetsPath = "Assets\\monaco"; // must contain vs/loader.js
+Viewer.MonacoExtensionScriptPath = "extensions/markdown.sample.js"; // optional, resolved under MonacoAssetsPath
+Viewer.EditorLanguage = "markdown";
+Viewer.MonacoTheme = MonacoEditorTheme.Dark;
 ```
 
 Handle links:
@@ -78,6 +97,13 @@ Useful control options:
 - `AutoFallbackReason`: describes why Auto mode selected or would select WebView2.
 - `ActualRenderModeChanged`: raised when the effective renderer changes.
 - `MaxImageWidth`: optional control-level override for themed image width.
+- `ViewMode`: preview-only or dual-pane editor+preview.
+- `MonacoAssetsPath`: required for dual-pane mode; points to a folder with `vs/loader.js`.
+- `MonacoExtensionScriptPath`: optional extension script path (relative to `MonacoAssetsPath`) for custom Monaco language features.
+- `EditorLanguage`: syntax language value passed to Monaco.
+- `MonacoTheme`: editor theme selection (`System`, `Light`, `Dark`).
+
+`ViewMode` defaults to `MarkdownViewMode.PreviewOnly`, so existing preview-only usage does not change.
 
 ## Native Rendering
 
@@ -134,6 +160,16 @@ dotnet restore MarkdownView.slnx
 dotnet build MarkdownView.slnx -c Debug --no-restore
 dotnet test tests\WinUI.Markdown.Tests\WinUI.Markdown.Tests.csproj -c Debug --no-restore --no-build
 ```
+
+To refresh Monaco assets in the sample app:
+
+```powershell
+cd samples\WinUI.Markdown.Sample
+npm install
+npm run sync-monaco
+```
+
+The sample app also includes `Assets/monaco/extensions/markdown.sample.js`, wired through `MonacoExtensionScriptPath`, which adds markdown snippets and editor configuration in Monaco.
 
 Create a package:
 
