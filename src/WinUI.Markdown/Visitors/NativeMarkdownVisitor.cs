@@ -34,11 +34,13 @@ public sealed class NativeMarkdownVisitor
 
     public FrameworkElement Render(MarkdownDocument document)
     {
-        var root = CreateStackPanel();
+        var root = CreateRichTextBlock();
+        root.IsTextSelectionEnabled = true;
+
         var blockIndex = 0;
         foreach (var block in document)
         {
-            root.Children.Add(RenderBlock(block, 0, blockIndex == 0));
+            AddRenderedBlock(root.Blocks, RenderBlock(block, 0, blockIndex == 0));
             blockIndex++;
         }
 
@@ -48,6 +50,38 @@ public sealed class NativeMarkdownVisitor
             Padding = new Thickness(0),
             Child = root
         };
+    }
+
+    private void AddRenderedBlock(BlockCollection target, FrameworkElement element)
+    {
+        if (element is RichTextBlock richTextBlock)
+        {
+            while (richTextBlock.Blocks.Count > 0)
+            {
+                var block = richTextBlock.Blocks[0];
+                richTextBlock.Blocks.RemoveAt(0);
+                target.Add(block);
+            }
+
+            return;
+        }
+
+        RenderUiBlock(target, element);
+    }
+
+    private static void RenderUiBlock(BlockCollection target, UIElement child)
+    {
+        target.Add(new Paragraph
+        {
+            Margin = new Thickness(0),
+            Inlines =
+            {
+                new InlineUIContainer
+                {
+                    Child = child
+                }
+            }
+        });
     }
 
     private FrameworkElement RenderBlock(MarkdigBlock block, int nestingLevel, bool isFirstInContainer = false)
@@ -75,21 +109,24 @@ public sealed class NativeMarkdownVisitor
         var sizeIndex = Math.Clamp(heading.Level - 1, 0, 5);
         var fontSize = HeadingSize(sizeIndex);
         var borderThickness = HeadingBorderThickness(sizeIndex);
-        var textBlock = new TextBlock
+        var block = CreateRichTextBlock();
+        block.Margin = new Thickness(0, isFirstInContainer ? 0 : _theme.HeadingSpacingBefore, 0, _theme.HeadingSpacingAfter);
+        block.FontSize = fontSize;
+        block.FontWeight = HeadingWeight(sizeIndex);
+        block.LineHeight = fontSize * 1.25;
+
+        var paragraph = new Paragraph
         {
-            Text = InlineText(heading.Inline),
-            FontFamily = _theme.BodyFont,
             FontSize = fontSize,
             FontWeight = HeadingWeight(sizeIndex),
-            LineHeight = fontSize * 1.25,
-            TextWrapping = TextWrapping.WrapWholeWords,
-            Foreground = _theme.Foreground
+            LineHeight = fontSize * 1.25
         };
+        AppendInlines(paragraph.Inlines, heading.Inline);
+        block.Blocks.Add(paragraph);
 
         if (borderThickness <= 0)
         {
-            textBlock.Margin = new Thickness(0, isFirstInContainer ? 0 : _theme.HeadingSpacingBefore, 0, _theme.HeadingSpacingAfter);
-            return textBlock;
+            return block;
         }
 
         return new Border
@@ -98,7 +135,7 @@ public sealed class NativeMarkdownVisitor
             BorderThickness = new Thickness(0, 0, 0, borderThickness),
             Padding = new Thickness(0, 0, 0, fontSize * _theme.HeadingBorderPaddingEm),
             Margin = new Thickness(0, isFirstInContainer ? 0 : _theme.HeadingSpacingBefore, 0, _theme.HeadingSpacingAfter),
-            Child = textBlock
+            Child = block
         };
     }
 
